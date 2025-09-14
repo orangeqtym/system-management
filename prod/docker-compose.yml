@@ -18,3 +18,38 @@ services:
       - prod_network
     env_file:
       - .env.prod
+
+  database:
+    image: postgres:15
+    restart: always
+    networks:
+      - prod_network
+    env_file:
+      - .env.prod
+    environment:
+      POSTGRES_DB: system_db
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api-service:
+    image: nginx:alpine
+    restart: always
+    networks:
+      - prod_network
+    ports:
+      - "6103:80"
+    depends_on:
+      - database
+
+  webapp:
+    image: nginx:alpine
+    restart: always
+    networks:
+      - prod_network
+    ports:
+      - "6104:80"
+
+volumes:
+  db_data:

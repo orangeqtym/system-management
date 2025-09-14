@@ -43,3 +43,8 @@ jobs:
               exit 1
               ;;
           esac
+
+          # Deploy new services
+          docker-compose -f "${ENVIRONMENT}/docker-compose.yml" up -d database
+          docker-compose -f "${ENVIRONMENT}/docker-compose.yml" up -d api-service
+          docker-compose -f "${ENVIRONMENT}/docker-compose.yml" up -d webapp

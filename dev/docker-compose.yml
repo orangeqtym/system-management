@@ -28,3 +28,38 @@ services:
       - dev_network
     ports:
       - "3001:3001" # Mapped to 3001
+
+  database:
+    image: postgres:15
+    restart: always
+    networks:
+      - dev_network
+    env_file:
+      - .env.dev
+    environment:
+      POSTGRES_DB: system_db
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api-service:
+    image: nginx:alpine
+    restart: always
+    networks:
+      - dev_network
+    ports:
+      - "6003:80"
+    depends_on:
+      - database
+
+  webapp:
+    image: nginx:alpine
+    restart: always
+    networks:
+      - dev_network
+    ports:
+      - "6004:80"
+
+volumes:
+  db_data:
