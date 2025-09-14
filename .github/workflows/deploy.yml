@@ -45,6 +45,6 @@ jobs:
           esac
 
           # Deploy new services
-          docker-compose -f "${ENVIRONMENT}/docker-compose.yml" up -d database
-          docker-compose -f "${ENVIRONMENT}/docker-compose.yml" up -d api-service
-          docker-compose -f "${ENVIRONMENT}/docker-compose.yml" up -d webapp
+          cd "${ENVIRONMENT}" && docker compose up -d database
+          cd "${ENVIRONMENT}" && docker compose up -d api-service
+          cd "${ENVIRONMENT}" && docker compose up -d webapp
