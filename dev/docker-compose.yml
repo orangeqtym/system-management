@@ -1,0 +1,23 @@
+version: '3.8'
+
+# This file defines the services for the DEVELOPMENT environment.
+# Services are isolated by the 'dev_network'.
+# Service discovery is handled by Docker DNS (e.g., http://email-service:3000).
+
+networks:
+  dev_network:
+    driver: bridge
+    name: dev_network
+
+services:
+  # --- Example Service Definition ---
+  #
+  # email-service:
+  #   image: ghcr.io/your-org/email-service:dev
+  #   restart: always
+  #   networks:
+  #     - dev_network
+  #   env_file:
+  #     - .env.dev
+  #   ports:
+  #     - "3000:3000" # Expose ports only if needed for external access during dev

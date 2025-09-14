@@ -1,0 +1,23 @@
+version: '3.8'
+
+# This file defines the services for the PRODUCTION environment.
+# Services are isolated by the 'prod_network'.
+# Service discovery is handled by Docker DNS (e.g., http://email-service:3000).
+
+networks:
+  prod_network:
+    driver: bridge
+    name: prod_network
+
+services:
+  # --- Example Service Definition ---
+  #
+  # email-service:
+  #   image: ghcr.io/your-org/email-service:v1.0.0 # Use specific version tags for prod
+  #   restart: always
+  #   networks:
+  #     - prod_network
+  #   env_file:
+  #     - .env.prod
+  #   # Production ports should be managed by a reverse proxy (e.g., Nginx)
+  #   # rather than exposed directly here, unless necessary.
