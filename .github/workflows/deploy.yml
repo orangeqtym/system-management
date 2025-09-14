@@ -27,4 +27,19 @@ jobs:
 
       - name: Execute Deployment Script
         run: |
-          bash scripts/deploy.sh ${{ steps.payload.outputs.environment }} ${{ steps.payload.outputs.service }} ${{ steps.payload.outputs.tag }}
+          SERVICE="${{ steps.payload.outputs.service }}"
+          ENVIRONMENT="${{ steps.payload.outputs.environment }}"
+          TAG="${{ steps.payload.outputs.tag }}"
+
+          case "$SERVICE" in
+            "email-service")
+              bash scripts/deploy.sh "$ENVIRONMENT" "$SERVICE" "$TAG"
+              ;;
+            "meal-planner-api")
+              bash scripts/deploy.sh "$ENVIRONMENT" "$SERVICE" "$TAG"
+              ;;
+            *)
+              echo "Unknown service: $SERVICE"
+              exit 1
+              ;;
+          esac
