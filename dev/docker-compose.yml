@@ -19,4 +19,4 @@ services:
     env_file:
       - .env.dev
     ports:
-      - "3001:3000" # Mapped to 3001 to avoid local conflicts
+      - "6001:3000" # Mapped to 6001 to avoid local conflicts
