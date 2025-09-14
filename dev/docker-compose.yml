@@ -20,3 +20,11 @@ services:
       - .env.dev
     ports:
       - "6001:3000" # Mapped to 6001 to avoid local conflicts
+
+  meal-planner-api:
+    image: ghcr.io/orangeqtym/meal-planner-api:dev
+    restart: always
+    networks:
+      - dev_network
+    ports:
+      - "3001:3001" # Mapped to 3001
