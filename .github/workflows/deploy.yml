@@ -18,6 +18,13 @@ jobs:
           echo "tag=${{ github.event.client_payload.tag }}" >> $GITHUB_OUTPUT
           echo "environment=${{ github.event.client_payload.environment }}" >> $GITHUB_OUTPUT
 
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+
       - name: Execute Deployment Script
         run: |
           bash scripts/deploy.sh ${{ steps.payload.outputs.environment }} ${{ steps.payload.outputs.service }} ${{ steps.payload.outputs.tag }}
