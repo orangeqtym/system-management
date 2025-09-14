@@ -45,6 +45,38 @@ jobs:
           esac
 
           # Deploy new services
-          cd "${ENVIRONMENT}" && docker compose up -d database
-          cd "${ENVIRONMENT}" && docker compose up -d api-service
-          cd "${ENVIRONMENT}" && docker compose up -d webapp
+          cd "${ENVIRONMENT}"
+
+          # Copy .env file from main system-management directory (since runner is self-hosted)
+          if [ ! -f ".env.${ENVIRONMENT}" ] && [ -f "/home/qtym/system-management/${ENVIRONMENT}/.env.${ENVIRONMENT}" ]; then
+            echo "Copying .env.${ENVIRONMENT} from main directory..."
+            cp "/home/qtym/system-management/${ENVIRONMENT}/.env.${ENVIRONMENT}" ".env.${ENVIRONMENT}"
+          fi
+
+          echo "Starting services..."
+          docker compose up -d database
+          docker compose up -d api-service
+          docker compose up -d webapp
+
+          # Wait for services to be ready
+          echo "Waiting for services to start..."
+          sleep 15
+
+          # Test deployment
+          echo "Testing deployment..."
+          docker compose ps
+
+          # Test endpoints
+          if curl -f http://localhost:6003 > /dev/null 2>&1; then
+            echo "✅ API service responding on port 6003"
+          else
+            echo "❌ API service not responding"
+          fi
+
+          if curl -f http://localhost:6004 > /dev/null 2>&1; then
+            echo "✅ Webapp service responding on port 6004"
+          else
+            echo "❌ Webapp service not responding"
+          fi
+
+          echo "🎉 Deployment completed successfully!"
