@@ -30,12 +30,12 @@ cd "/home/qtym/system-management/${ENVIRONMENT}"
 # Pull the latest image for the service
 # The image name and tag are specified in the docker-compose.yml file.
 echo "Pulling new image for $SERVICE_NAME..."
-docker-compose pull $SERVICE_NAME
+docker compose pull $SERVICE_NAME
 
 # Restart the service container
 # --no-deps ensures that only the specified service is restarted.
 echo "Restarting container for $SERVICE_NAME..."
-docker-compose up -d --no-deps $SERVICE_NAME
+docker compose up -d --no-deps $SERVICE_NAME
 
 echo "---"
 echo "Deployment of '$SERVICE_NAME' to '$ENVIRONMENT' completed successfully."
