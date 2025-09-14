@@ -11,7 +11,7 @@ replace(
     old_string='# --- Example Service Definition ---',
     new_string='''# --- Service Definitions ---
   email-service:
-    image: ghcr.io/YOUR_ORG/email-service:dev
+    image: ghcr.io/orangeqtym/email-service:dev
     restart: always
     networks:
       - dev_network

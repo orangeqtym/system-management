@@ -11,7 +11,7 @@ replace(
     old_string='# --- Example Service Definition ---',
     new_string='''# --- Service Definitions ---
   email-service:
-    image: ghcr.io/YOUR_ORG/email-service:v1.0.0 # This tag will be updated by your release process
+    image: ghcr.io/orangeqtym/email-service:v1.0.0 # This tag will be updated by your release process
     restart: always
     networks:
       - prod_network
