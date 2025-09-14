@@ -10,14 +10,11 @@ networks:
     name: prod_network
 
 services:
-  # --- Example Service Definition ---
-  #
-  # email-service:
-  #   image: ghcr.io/your-org/email-service:v1.0.0 # Use specific version tags for prod
-  #   restart: always
-  #   networks:
-  #     - prod_network
-  #   env_file:
-  #     - .env.prod
-  #   # Production ports should be managed by a reverse proxy (e.g., Nginx)
-  #   # rather than exposed directly here, unless necessary.
+  # --- Service Definitions ---
+  email-service:
+    image: ghcr.io/YOUR_ORG/email-service:v1.0.0 # This tag will be updated by your release process
+    restart: always
+    networks:
+      - prod_network
+    env_file:
+      - .env.prod
