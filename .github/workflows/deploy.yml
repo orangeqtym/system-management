@@ -66,17 +66,25 @@ jobs:
           echo "Testing deployment..."
           docker compose ps
 
-          # Test endpoints
-          if curl -f http://localhost:6003 > /dev/null 2>&1; then
-            echo "✅ API service responding on port 6003"
+          # Test endpoints (different ports for dev vs prod)
+          if [ "$ENVIRONMENT" = "dev" ]; then
+            API_PORT=6003
+            WEBAPP_PORT=6004
           else
-            echo "❌ API service not responding"
+            API_PORT=6103
+            WEBAPP_PORT=6104
           fi
 
-          if curl -f http://localhost:6004 > /dev/null 2>&1; then
-            echo "✅ Webapp service responding on port 6004"
+          if curl -f http://localhost:${API_PORT} > /dev/null 2>&1; then
+            echo "✅ API service responding on port ${API_PORT}"
           else
-            echo "❌ Webapp service not responding"
+            echo "❌ API service not responding on port ${API_PORT}"
+          fi
+
+          if curl -f http://localhost:${WEBAPP_PORT} > /dev/null 2>&1; then
+            echo "✅ Webapp service responding on port ${WEBAPP_PORT}"
+          else
+            echo "❌ Webapp service not responding on port ${WEBAPP_PORT}"
           fi
 
           echo "🎉 Deployment completed successfully!"
