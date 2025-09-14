@@ -14,27 +14,8 @@ ENVIRONMENT=$1
 SERVICE_NAME=$2
 IMAGE_TAG=$3
 
-# Load environment variables from the appropriate .env file
-ENV_FILE=".env.${ENVIRONMENT}"
-if [ -f "$ENV_FILE" ]; then
-    set -a # Automatically export all variables
-    . "$ENV_FILE"
-    set +a
-    echo "Loaded environment variables from $ENV_FILE"
-else
-    echo "Warning: No .env file found for environment $ENVIRONMENT at $ENV_FILE"
-fi
-
-# Ensure BASE_RECIPIENT_EMAIL is set from the loaded environment
-if [ -z "$BASE_RECIPIENT_EMAIL" ]; then
-    echo "Error: BASE_RECIPIENT_EMAIL is not set in $ENV_FILE or as an environment variable."
-    exit 1
-fi
-
-FINAL_RECIPIENT_EMAIL=$(echo "$BASE_RECIPIENT_EMAIL" | sed "s/@/+$ENVIRONMENT@/")
-
 if [ -z "$ENVIRONMENT" ] || [ -z "$SERVICE_NAME" ]; then
-    echo "Usage: $0 <ENVIRONMENT> <SERVICE_NAME> <IMAGE_TAG>"
+    echo "Usage: $0 <ENVIRONMENT> <SERVICE_NAME>"
     exit 1
 fi
 
@@ -54,7 +35,7 @@ docker compose pull $SERVICE_NAME
 # Restart the service container
 # --no-deps ensures that only the specified service is restarted.
 echo "Restarting container for $SERVICE_NAME..."
-docker compose up -d --no-deps $SERVICE_NAME -e RECIPIENT_EMAIL=$FINAL_RECIPIENT_EMAIL
+docker compose up -d --no-deps $SERVICE_NAME
 
 echo "---"
 echo "Deployment of '$SERVICE_NAME' to '$ENVIRONMENT' completed successfully."
