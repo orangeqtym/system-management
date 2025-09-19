@@ -68,11 +68,13 @@ jobs:
 
           # Test endpoints (different ports for dev vs prod)
           if [ "$ENVIRONMENT" = "dev" ]; then
-            API_PORT=6003
-            WEBAPP_PORT=6004
+            API_PORT=4003
+            WEBAPP_PORT=4004
+            MEAL_PLANNER_PORT=4001
           else
-            API_PORT=6103
-            WEBAPP_PORT=6104
+            API_PORT=5003
+            WEBAPP_PORT=5004
+            MEAL_PLANNER_PORT=5001
           fi
 
           if curl -f http://localhost:${API_PORT} > /dev/null 2>&1; then
