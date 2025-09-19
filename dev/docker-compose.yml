@@ -19,15 +19,38 @@ services:
     env_file:
       - .env.dev
     ports:
-      - "6001:3000" # Mapped to 6001 to avoid local conflicts
+      - "4000:3000" # Dev environment uses 4xxx ports
 
   meal-planner-api:
     image: ghcr.io/orangeqtym/meal-planner-api:dev
     restart: always
     networks:
       - dev_network
+    env_file:
+      - .env.dev
+    environment:
+      # Database Configuration
+      DB_HOST: ${MEAL_PLANNER_DB_HOST}
+      DB_PORT: ${MEAL_PLANNER_DB_PORT}
+      DB_NAME: ${MEAL_PLANNER_DB_NAME}
+      DB_USER: ${MEAL_PLANNER_DB_USER}
+      DB_PASSWORD: ${MEAL_PLANNER_DB_PASSWORD}
+
+      # API Configuration
+      PORT: ${MEAL_PLANNER_PORT}
+      NODE_ENV: development
+      CORS_ORIGIN: ${MEAL_PLANNER_CORS_ORIGIN}
+      LOG_LEVEL: ${MEAL_PLANNER_LOG_LEVEL}
     ports:
-      - "3001:3001" # Mapped to 3001
+      - "4001:3001"
+    depends_on:
+      - database
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   database:
     image: postgres:15
@@ -49,7 +72,7 @@ services:
     networks:
       - dev_network
     ports:
-      - "6003:80"
+      - "4003:80"
     depends_on:
       - database
 
@@ -59,7 +82,7 @@ services:
     networks:
       - dev_network
     ports:
-      - "6004:80"
+      - "4004:80"
 
 volumes:
   db_data:
