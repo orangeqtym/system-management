@@ -27,6 +27,15 @@ echo "---"
 # Navigate to the correct environment directory
 cd "/home/qtym/system-management/${ENVIRONMENT}"
 
+# Copy environment configuration from external location (outside git repo)
+echo "Copying environment configuration..."
+if [ -f "/home/qtym/deployment-configs/${ENVIRONMENT}/.env.${ENVIRONMENT}" ]; then
+    cp "/home/qtym/deployment-configs/${ENVIRONMENT}/.env.${ENVIRONMENT}" "./.env.${ENVIRONMENT}"
+    echo "✅ Environment file copied for ${ENVIRONMENT}"
+else
+    echo "⚠️  Warning: No environment file found at /home/qtym/deployment-configs/${ENVIRONMENT}/.env.${ENVIRONMENT}"
+fi
+
 # Pull the latest image for the service
 # The image name and tag are specified in the docker-compose.yml file.
 echo "Pulling new image for $SERVICE_NAME..."
